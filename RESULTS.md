@@ -26,3 +26,7 @@
 - Actual: `500 Internal Server Error`, `Content-Length: 0`, and an empty body (confirmed by both pytest and curl).
 - Severity: medium. A valid customer restriction causes a server error instead of a clear input error, so clients cannot explain the problem to the customer.
 - Final Step 0.16 run: `pytest -v` reported **16 passed, 1 xfailed**. The defect test uses strict xfail so a future fix will be visible.
+
+## Part A
+
+- Step A1, added the input domain model to `README.md` and the base choice plus two out-of-range stars cases to `test_create_rating.py`. `pytest -v` reported **19 passed, 1 xfailed**.
