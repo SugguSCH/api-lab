@@ -30,3 +30,4 @@
 ## Part A
 
 - Step A1, added the input domain model to `README.md` and the base choice plus two out-of-range stars cases to `test_create_rating.py`. `pytest -v` reported **19 passed, 1 xfailed**.
+- Step A2, used curl first to confirm the error messages for decimal stars, text stars, missing stars, unknown pizza, no token, and a short token. Added one test case for each missing block of C2, C3, and C4 and mapped every block to its test in `README.md`. `pytest -v` reported **25 passed, 1 xfailed**.
