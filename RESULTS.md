@@ -15,3 +15,4 @@
 - Step 0.11, added `log_in_new_user` and the per-test `auth` fixture. The new user had no ratings; `pytest -v` reported 5 passed. User tokens remained only in memory.
 - Step 0.12 (optional), ran `pytest -v test_no_session.py` three times without a session: run 1 failed (login `401`), run 2 failed (login `401`), run 3 failed (login `401`), despite user creation returning `201` each time. Deleted the temporary flaky test afterward.
 - Step 0.13, added the `pizza_id` fixture and a test that creates a 5-star rating with a freshly created user's token. The rating response had `201`, the expected stars and pizza id, and an integer rating id; `pytest -v` reported 6 passed.
+- Step 0.14, added a 3-star `rating` fixture with teardown plus read, update, and delete tests. All rating changes used each test user's token. `pytest -v` reported 9 passed; `pytest -v test_ratings.py::test_delete_rating` also passed alone (1 passed).
