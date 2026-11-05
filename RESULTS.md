@@ -10,3 +10,4 @@
 - Step 0.6, `pytest -v`: the `Margherita` test passed (1 passed). Changing the expected name to `Pineapple Supreme` produced the expected `AssertionError` (1 failed). After restoring `Margherita`, the test passed again (1 passed).
 - Step 0.7, `pytest -v`: both `test_names_are_listed` and `test_tools_are_listed` passed (2 passed). The tools test read the token from the local, Git-ignored `auth.txt`.
 - Step 0.8, `pytest -v`: after adding the vegetarian pizza test, 3 passed; after adding the no-token rejection test, 4 passed. The vegetarian response had a nonempty name and vegetarian ingredients, and the no-token request returned `401` with `{"error":"authentication failed"}`.
+- Step 0.9, created test user `lab-40933d066aaf` with a `requests.Session` (`201 Created`, id `48`), logged in (`200`), and read that user's ratings with its own token (`200`, `{"ratings":[]}`). The session kept the `AWSALB` and `AWSALBCORS` cookies. The token was not saved in the repository.
