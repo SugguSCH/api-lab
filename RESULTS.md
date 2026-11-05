@@ -8,3 +8,4 @@
 - Step 0.4, `POST /api/pizza` with `veg.json` returned **A Tall Funghi**. The response marked the pizza and every ingredient as vegetarian.
 - Step 0.5, Python `requests`: `GET /api/names` returned `200`, `Content-Type: application/json`, a `dict` body, and first name `Americana`; `GET /api/tools` with the token returned `200` and Knife, Pizza cutter, Scissors; `POST /api/pizza` with `{"mustBeVegetarian": true}` returned `200` and **An Orange Romana**.
 - Step 0.6, `pytest -v`: the `Margherita` test passed (1 passed). Changing the expected name to `Pineapple Supreme` produced the expected `AssertionError` (1 failed). After restoring `Margherita`, the test passed again (1 passed).
+- Step 0.7, `pytest -v`: both `test_names_are_listed` and `test_tools_are_listed` passed (2 passed). The tools test read the token from the local, Git-ignored `auth.txt`.
