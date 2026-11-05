@@ -17,3 +17,12 @@
 - Step 0.13, added the `pizza_id` fixture and a test that creates a 5-star rating with a freshly created user's token. The rating response had `201`, the expected stars and pizza id, and an integer rating id; `pytest -v` reported 6 passed.
 - Step 0.14, added a 3-star `rating` fixture with teardown plus read, update, and delete tests. All rating changes used each test user's token. `pytest -v` reported 9 passed; `pytest -v test_ratings.py::test_delete_rating` also passed alone (1 passed).
 - Step 0.15, duplicate username returned `400` with `{"error":"username already taken"}`; wrong password returned `401` with `{"error":"authentication failed"}`; empty username returned `400` with `{"error":"username field is empty"}`. `pytest -v` reported 12 passed.
+- Step 0.16, the characteristic **number of the three tools excluded** has four blocks: 0, 1, 2, or 3. The original tests covered only block 1 (`["Knife"]`, `["Scissors"]`). Added `[]` for block 0, `["Knife", "Scissors"]` for block 2, and all three tools for block 3. The first four inputs passed; the all-tools input failed because the API returned `500`.
+
+### Defect 1: Excluding all tools causes a server error
+
+- Request: `POST /api/pizza` with `{"excludedTools":["Knife","Pizza cutter","Scissors"]}` and an Authorization token. Confirmed with `curl -i -H "@auth.txt" -d "@all-tools-excluded.json" https://quickpizza.grafana.com/api/pizza`.
+- Expected: `400 Bad Request` with a nonempty JSON error message because no pizza can use an available tool.
+- Actual: `500 Internal Server Error`, `Content-Length: 0`, and an empty body (confirmed by both pytest and curl).
+- Severity: medium. A valid customer restriction causes a server error instead of a clear input error, so clients cannot explain the problem to the customer.
+- Final Step 0.16 run: `pytest -v` reported **16 passed, 1 xfailed**. The defect test uses strict xfail so a future fix will be visible.
