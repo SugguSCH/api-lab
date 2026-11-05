@@ -13,3 +13,4 @@
 - Step 0.9, created test user `lab-40933d066aaf` with a `requests.Session` (`201 Created`, id `48`), logged in (`200`), and read that user's ratings with its own token (`200`, `{"ratings":[]}`). The session kept the `AWSALB` and `AWSALBCORS` cookies. The token was not saved in the repository.
 - Step 0.10, added the session-scoped `api` fixture in `conftest.py`; `pytest -v` still reported 4 passed.
 - Step 0.11, added `log_in_new_user` and the per-test `auth` fixture. The new user had no ratings; `pytest -v` reported 5 passed. User tokens remained only in memory.
+- Step 0.12 (optional), ran `pytest -v test_no_session.py` three times without a session: run 1 failed (login `401`), run 2 failed (login `401`), run 3 failed (login `401`), despite user creation returning `201` each time. Deleted the temporary flaky test afterward.
