@@ -12,3 +12,4 @@
 - Step 0.8, `pytest -v`: after adding the vegetarian pizza test, 3 passed; after adding the no-token rejection test, 4 passed. The vegetarian response had a nonempty name and vegetarian ingredients, and the no-token request returned `401` with `{"error":"authentication failed"}`.
 - Step 0.9, created test user `lab-40933d066aaf` with a `requests.Session` (`201 Created`, id `48`), logged in (`200`), and read that user's ratings with its own token (`200`, `{"ratings":[]}`). The session kept the `AWSALB` and `AWSALBCORS` cookies. The token was not saved in the repository.
 - Step 0.10, added the session-scoped `api` fixture in `conftest.py`; `pytest -v` still reported 4 passed.
+- Step 0.11, added `log_in_new_user` and the per-test `auth` fixture. The new user had no ratings; `pytest -v` reported 5 passed. User tokens remained only in memory.
