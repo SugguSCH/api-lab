@@ -33,3 +33,25 @@
 - Step A2, used curl first to confirm the error messages for decimal stars, text stars, missing stars, unknown pizza, no token, and a short token. Added one test case for each missing block of C2, C3, and C4 and mapped every block to its test in `README.md`. `pytest -v` reported **25 passed, 1 xfailed**.
 - Step A3, boundary updates with stars `0`, `1`, `5`, and `6` returned `400`, `200`, `200`, and `400`. Rejected updates left the saved rating at 3 stars; accepted updates saved the new value. `pytest -v` reported **29 passed, 1 xfailed**.
 - Step A4, a second test user tried to read, update, and delete the owner's rating. The exact status codes were **404**, **400**, and **400**, respectively. After each attempt, the owner could still read the unchanged rating. `pytest -v` reported **32 passed, 1 xfailed**.
+
+## Part B
+
+1. API test เจอปัญหาการเชื่อมต่อจริง เช่น session/cookie พาไปผิด server และปัญหาฐานข้อมูลจริง เช่นบันทึกแล้วอ่านกลับไม่ตรง ซึ่ง unit test ที่แทนส่วนอื่นด้วย stub อาจไม่เจอ แต่ unit test ยังมีประโยชน์เพราะเร็วและชี้จุดที่ logic พังได้ง่ายกว่า
+2. แต่ละ test สร้างผู้ใช้ใหม่เพื่อไม่ให้ rating ชนหรือถูกคนอื่นแก้ และใช้ token ของตัวเองในการสร้าง/แก้ข้อมูล ใน Project 2 จะสร้างบัญชีและข้อมูลทดสอบของแต่ละ test แยกกันเหมือนกัน
+3. ใช้ session เดียวเพื่อเก็บ cookie `AWSALB` ให้คำขอไป server เดิม ตอน Step 0.12 ที่ไม่ใช้ session ล็อกอินได้ `401` ทั้ง 3 รอบ แม้สร้างผู้ใช้ได้ `201` ทุกครั้ง
+4. บล็อกที่ตัดเครื่องมือ **3 ตัว** พบ defect: ได้ `500` กับ body ว่าง ทำให้แอปบอกผู้ใช้ไม่ได้ว่าต้องแก้อะไร ส่วน `400` พร้อมข้อความอธิบายได้ เก็บ test แบบ `xfail(strict=True)` เพื่อเฝ้าดูจนกว่าจะมีการแก้
+5. Base choice ต้อง **9 tests**: 1 ฐาน + (3−1) + (4−1) + (2−1) + (3−1) = 9; ถ้าทุก combination ต้อง **72 tests**: 3 × 4 × 2 × 3
+6. ผู้ใช้อีกคนอ่านได้ `404`, แก้ได้ `400`, ลบได้ `400` คาดว่าอ่านได้ `404` เพื่อไม่เผยว่ามี rating ส่วนแก้/ลบควรเป็น `403 Forbidden` แต่โจทย์กำหนดแค่ 4xx และข้อมูลไม่เปลี่ยน จึงยังสรุปว่าเป็น defect ไม่ได้ หาก API ระบุรหัสไว้ชัดจึงค่อยแจ้ง defect
+7. ใช้ `curl -H "@madeup.txt" https://quickpizza.grafana.com/api/ratings` กับ token สมมติ 16 ตัว ได้ `200 OK` และ JSON รายการ ratings จริง ถือเป็น defect ด้าน authentication เพราะ token ที่ไม่ได้ออกให้ควรอ่านไม่ได้ คนแปลกหน้าอาจเข้าถึงข้อมูลที่ไม่ควรเห็น ส่วนสิทธิ์เขียนไม่ได้ทดสอบ
+8. API test เช็ก status code และ JSON ที่แน่นอนได้ง่ายกว่า ส่วน test ผ่านเว็บตรวจหน้าตาและการกดใช้งานจริงของผู้ใช้ได้
+
+### Defect 2: Made-up token can read ratings
+
+- Request: `GET /api/ratings` with the made-up 16-character token from Part B question 7. Read-only request only.
+- Expected: `401 Unauthorized` with an authentication error because the token was not issued by login.
+- Actual: `200 OK` with a JSON `ratings` list.
+- Severity: high. An arbitrary token exposed rating data to an unauthenticated caller. Write access was not tested.
+
+## Full run report
+
+- `pytest -v --html=report.html --self-contained-html` produced `report.html` with **32 passed, 1 xfailed**. A test-user token in the expected-failure details was redacted before saving the report for GitHub.

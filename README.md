@@ -1,5 +1,27 @@
 # api-lab
 
+QuickPizza API lab using Python, requests, and pytest.
+
+## Install and run
+
+From this repository folder, create a virtual environment and install the dependencies:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+Create a local `auth.txt` with the public practice token from the lab handout in the form `Authorization: token <practice-token>`. Git ignores this file. Then run:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest -v
+.\.venv\Scripts\python.exe -m pytest -v --html=report.html --self-contained-html
+```
+
+Tests that create or change ratings generate their own users and tokens. One excluded-tools test is marked `xfail` for the confirmed API defect. See `RESULTS.md` for observations and Part B answers.
+
+For Part B question 7, create `madeup.txt` locally with the exact sample line from the handout and use it only for the read-only request. This file is also Git-ignored because the API accepts that value for reading ratings.
+
 ## Part A: Input domain model for `POST /api/ratings`
 
 The base choice is 3 whole-number stars, an existing pizza, and the new test user's own token. Each additional test changes one characteristic while keeping the others at the base choice.
